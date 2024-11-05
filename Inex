@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>DASH-Score Berechnung</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .question { margin-bottom: 15px; }
+        .question label { display: block; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>DASH-Score Berechnung</h1>
+    <p>Bitte bewerten Sie jede Frage von 1 (keine Schwierigkeit) bis 5 (sehr große Schwierigkeit). Klicken Sie dann auf "Berechnen", um Ihren Score zu sehen.</p>
+    
+    <form id="dashForm">
+        <div id="questions"></div>
+        <button type="button" onclick="calculateScore()">Berechnen</button>
+    </form>
+    
+    <p id="result"></p>
+    
+    <script>
+        const questions = [
+            "Haben Sie Probleme, eine schwere Pfanne zu heben?",
+            "Haben Sie Probleme, ein Glas oder eine Tasse zu heben?",
+            "Haben Sie Probleme, Ihr Haar zu kämmen?",
+            "Haben Sie Probleme, etwas zu waschen?",
+            "Haben Sie Probleme, Hemden anzuziehen?",
+            "Haben Sie Probleme, Hosen oder Schuhe anzuziehen?",
+            "Haben Sie Probleme, die Türklinke zu drücken?",
+            "Haben Sie Probleme, eine Tüte zu tragen?",
+            "Haben Sie Probleme, kleine Dinge zu greifen?",
+            "Haben Sie Probleme, die Fernbedienung zu halten?",
+            "Haben Sie Schmerzen in Ihrer Hand, wenn Sie sie nutzen?",
+            "Haben Sie Schwierigkeiten, Ihren Arm oder Ihre Hand zu bewegen?",
+            "Haben Sie Schmerzen in Ruhe?",
+            "Brauchen Sie Pausen bei Arbeiten mit den Händen?",
+            "Haben Sie Probleme beim Tippen?",
+            "Haben Sie Probleme beim Schreiben?",
+            "Haben Sie Probleme beim Einkaufen?",
+            "Haben Sie Probleme, eine volle Tasse zu tragen?",
+            "Haben Sie Probleme, zu essen (z.B. Besteck halten)?",
+            "Haben Sie Probleme, sich nach vorne zu lehnen?",
+            "Haben Sie Probleme, Werkzeuge zu benutzen?",
+            "Haben Sie Schwierigkeiten, Türen zu öffnen?",
+            "Haben Sie Schwierigkeiten, Schubladen zu öffnen?",
+            "Haben Sie Probleme beim Autofahren?",
+            "Haben Sie Probleme beim Halten des Lenkrads?",
+            "Haben Sie Schwierigkeiten, Ihre Hand zu strecken?",
+            "Haben Sie Schwierigkeiten, Ihre Hand zu drehen?",
+            "Haben Sie Schwierigkeiten beim Drücken oder Ziehen?",
+            "Haben Sie das Gefühl, dass Ihre Hand oft steif ist?",
+            "Fühlen Sie sich eingeschränkt bei alltäglichen Aufgaben?"
+        ];
+
+        const questionContainer = document.getElementById("questions");
+        
+        questions.forEach((question, index) => {
+            const questionDiv = document.createElement("div");
+            questionDiv.className = "question";
+            questionDiv.innerHTML = `
+                <label>${index + 1}. ${question}</label>
+                <input type="number" min="1" max="5" name="q${index + 1}" required>
+            `;
+            questionContainer.appendChild(questionDiv);
+        });
+
+        function calculateScore() {
+            const form = document.forms["dashForm"];
+            let total = 0;
+            let count = 0;
+
+            for (let i = 0; i < questions.length; i++) {
+                const answer = parseInt(form[`q${i + 1}`].value);
+                if (!isNaN(answer)) {
+                    total += answer;
+                    count++;
+                }
+            }
+
+            if (count < questions.length) {
+                alert("Bitte beantworten Sie alle Fragen.");
+                return;
+            }
+
+            const score = ((total / count - 1) * 25).toFixed(2);
+            document.getElementById("result").innerText = `Ihr DASH-Score beträgt: ${score}`;
+        }
+    </script>
+</body>
+</html>
